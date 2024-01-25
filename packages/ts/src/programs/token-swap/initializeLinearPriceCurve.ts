@@ -94,10 +94,11 @@ export const initializeLinearPriceCurveTx = async (
 
   // setupTransaction creates required accounts for tbc
   let setupTransaction = new Transaction();
+  setupTransaction.add(PRIORITY_FEE_IX);
 
   //initTbcTransaciton initializes the new tbc
   let initTbcTransaction = new Transaction();
-
+    initTbcTransaction.add(PRIORITY_FEE_IX);
   // get exepcted swap authority PDA
 
   const [expectedSwapAuthorityPDA] = await PublicKey.findProgramAddress(
@@ -205,19 +206,14 @@ export const initializeLinearPriceCurveTx = async (
   // populate setup transaction
 
   setupTransaction.add(
-      PRIORITY_FEE_IX,
     ...tokenIx,
     ...createTokenATokenAccountIx,
     ...createTokenBTokenAccountIx,
     tokenBTransferIx
   );
-
-  console.log(setupTransaction);
-
   // populate init tbc transaction
 
   initTbcTransaction.add(
-      PRIORITY_FEE_IX,
     ...createFeeAccountIx,
     ...createDestinationAccountIx,
     tokenSwapInfoIx,
@@ -226,7 +222,7 @@ export const initializeLinearPriceCurveTx = async (
 
   //add tx payer and recent blockchash to setup transaction
 
-  await addTxPayerAndHash(setupTransaction, connection, walletPubKey);
+  // await addTxPayerAndHash(setupTransaction, connection, walletPubKey);
 
   // partially sign setup transaction with generated accounts
 
