@@ -8,11 +8,13 @@ import {
   partialSignTx,
   addTxPayerAndHash,
 } from "../../utils";
+import {ComputeBudgetProgram} from "@solana/web3.js";
 
 const {
   accountLayout: { SWAP_ACCOUNT_SPACE },
 } = config;
-
+const PRIORITY_RATE = 300; // MICRO_LAMPORTS
+const PRIORITY_FEE_IX = ComputeBudgetProgram.setComputeUnitPrice({microLamports: PRIORITY_RATE});
 const { PublicKey, Transaction } = web3;
 
 interface initializeLinearPriceCurveTxResults {
@@ -203,6 +205,7 @@ export const initializeLinearPriceCurveTx = async (
   // populate setup transaction
 
   setupTransaction.add(
+      PRIORITY_FEE_IX,
     ...tokenIx,
     ...createTokenATokenAccountIx,
     ...createTokenBTokenAccountIx,
@@ -212,6 +215,7 @@ export const initializeLinearPriceCurveTx = async (
   // populate init tbc transaction
 
   initTbcTransaction.add(
+      PRIORITY_FEE_IX,
     ...createFeeAccountIx,
     ...createDestinationAccountIx,
     tokenSwapInfoIx,
