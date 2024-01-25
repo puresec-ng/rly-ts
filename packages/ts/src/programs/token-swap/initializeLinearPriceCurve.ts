@@ -212,6 +212,8 @@ export const initializeLinearPriceCurveTx = async (
     tokenBTransferIx
   );
 
+  console.log(setupTransaction);
+
   // populate init tbc transaction
 
   initTbcTransaction.add(
